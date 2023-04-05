@@ -12,7 +12,7 @@ import ibf2022.paf.assessment.server.repositories.TaskRepository;
 import ibf2022.paf.assessment.server.repositories.UserRepository;
 
 @SpringBootApplication
-public class ServerApplication implements CommandLineRunner{
+public class ServerApplication{
 
 	@Autowired
 	UserRepository repo;
@@ -22,25 +22,5 @@ public class ServerApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 		
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		//test findUSerByUSername
-		// Optional<User> opt =  repo.findUSerByUSername("fred");
-		// System.out.println(opt.get());
-
-		//test insert user
-		// User user = new User();
-		// user.setUsername("kyle");
-		// user.setName("Kyle");
-		// System.out.println(repo.insertUser(user));
-
-		//get user_id
-		//System.out.println(taskRepo.getUserIdSQL("betty"));
-
-		//test user exist
-		//System.out.println(repo.checkIfUserExist("betty"));;
-
 	}
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +26,7 @@ public class TasksController {
     TodoService svc;
 
     @PostMapping(path = "/task",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<ModelAndView> postTask(@RequestBody String form) {
+    public ModelAndView postTask(@RequestBody String form) {
         
         List<Task> tasks = new ArrayList<>();
         int tasksCount =0;
@@ -54,13 +53,13 @@ public class TasksController {
             svc.upsertTask(username, tasks);
         } catch (TaskInsertException e) {
             ModelAndView mv = new ModelAndView("error");
-            return new ResponseEntity<ModelAndView>(mv,HttpStatus.INTERNAL_SERVER_ERROR);
+            return mv;
         }
 
         ModelAndView mv = new ModelAndView("result");
         mv.addObject("taskCount", tasksCount);
         mv.addObject("username", username);
-
-        return new ResponseEntity<ModelAndView>(mv,HttpStatus.OK);
+        mv.setStatus(HttpStatus.OK);
+        return mv;
     }
 }
