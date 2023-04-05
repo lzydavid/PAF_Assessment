@@ -13,16 +13,7 @@ public class TaskRepository {
     @Autowired
     JdbcTemplate template;
 
-    public final static String getUserIdSQL = "select user_id from user where username = ?;";
-
     public final static String insertTaskSQL = "insert into task(user_id,description,priority,due_date) value (?,?,?,?);";
-
-
-    public String getUserIdSQL(String username) {
-
-        String userid = template.queryForObject(getUserIdSQL, String.class,username);
-        return userid;
-    }
 
     //'1b80114c','swim',2,'2023-4-4'
     public boolean insertTask(Task task) {

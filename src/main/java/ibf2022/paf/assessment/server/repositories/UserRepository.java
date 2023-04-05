@@ -1,5 +1,6 @@
 package ibf2022.paf.assessment.server.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,13 +20,15 @@ public class UserRepository {
 
     private static final String findUSerByUSernameSQL = "select * from user where username = ?;";
     private static final String insertUserSQL = "insert into user(user_id,username,name) values (?,?,?);";
-    private static final String checkIfReccordExistByUsernameSQL = "select exists (select * from user where username = ?);";
+    
+    public Optional<User> findUserByUSername(String username){
 
-    public Optional<User> findUSerByUSername(String username){
+        List<User> result = template.query(findUSerByUSernameSQL, new UserRowMapper(), username);
 
-        Optional<User> result = Optional.ofNullable( template.queryForObject(findUSerByUSernameSQL, new UserRowMapper(),username)) ;
-
-        return result;
+        if(result.size()==0){
+            return Optional.empty();
+        }
+        return Optional.of(result.get(0));
     }
 
     public String insertUser(User user) {
@@ -43,11 +46,5 @@ public class UserRepository {
             return user_id;
         }
         return "Failed to insert";
-    }
-
-    public Boolean checkIfUserExist(String username) {
-
-        Boolean exist = template.queryForObject(checkIfReccordExistByUsernameSQL, Boolean.class,username);
-        return exist;
     }
 }

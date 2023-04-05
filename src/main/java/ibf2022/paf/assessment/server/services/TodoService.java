@@ -1,6 +1,7 @@
 package ibf2022.paf.assessment.server.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,14 @@ public class TodoService {
     @Transactional(rollbackFor = TaskInsertException.class)
     public void upsertTask(String username,List<Task> tasks) throws TaskInsertException {
 
-        Boolean userExist = userRepository.checkIfUserExist(username);
-        if(userExist){
-            //get user_id
-            String userId = taskRepository.getUserIdSQL(username);
+        Optional<User> opt = userRepository.findUserByUSername(username);
+
+        if(opt.isPresent()){
+            //get existing User
+            User user = opt.get();
 
             for (Task task : tasks) {
-                task.setUserId(userId);
+                task.setUserId(user.getUserId());
                 Boolean taskInsert  = taskRepository.insertTask(task);
                 if(!taskInsert){
                     throw new TaskInsertException();
